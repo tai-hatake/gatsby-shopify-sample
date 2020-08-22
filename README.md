@@ -110,9 +110,9 @@ plugins: [
 
 ## 商品ページを作成
 
-- 一覧ページ作成
+- `src/pages/products.js`に一覧ページ作成
 
-```js: src/pages/products.js
+```js
 import React from "react"
 import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
@@ -154,9 +154,9 @@ export const query = graphql`
 `
 ```
 
-- 詳細ページ作成
+- `src/templates/product.js`詳細ページのテンプレート作成
 
-```js: src/templates/proeuct.js
+```js
 import React from "react"
 import Layout from "../components/layout"
 const ProductTemplate = ({ pageContext }) => {
@@ -172,7 +172,9 @@ const ProductTemplate = ({ pageContext }) => {
 export default ProductTemplate
 ```
 
-```js: gatsby-node.js
+- `gatsby-node.js`に商品ごとに詳細ページを作成する処理を実装
+
+```js
 const path = require(`path`)
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
