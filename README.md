@@ -1,99 +1,209 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.org">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's default starter
-</h1>
+# 手順
 
-Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+## Shopifyに登録する
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.org/docs/gatsby-starters/)._
+- [Shopify](https://www.shopify.jp/)に登録する
 
-## 🚀 Quick start
+- プライベートアプリ作成
 
-1.  **Create a Gatsby site.**
+`プライベートアプリ名`には適切な名称を入力して、`緊急連絡用開発者メール`にメールアドレスを入力します。
 
-    Use the Gatsby CLI to create a new site, specifying the default starter.
+`Admin API`は、デフォルトのままにします。表示されている項目が`読み取り専用`になっているのを確認します。
 
-    ```shell
-    # create a new Gatsby site using the default starter
-    gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
-    ```
+`ストアフロントAPI`の欄にある、`このアプリがストアフロントAPIを使用して…`をチェックします。
 
-1.  **Start developing.**
+`ストアフロントAPI権限`が表示されるので、デフォルトでチェックされているのに加えて、`商品タグを読む`にもチェックします。
 
-    Navigate into your new site’s directory and start it up.
+## Gatsbyセットアップ（MacOS）
 
-    ```shell
-    cd my-default-starter/
-    gatsby develop
-    ```
+### 各ツールインストール
 
-1.  **Open the source code and start editing!**
+- HomeBrewのインストール
 
-    Your site is now running at `http://localhost:8000`!
+- XCodeのインストール
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql)._
+```bash
+xcode-select --install
+```
 
-    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+- Nodeのインストール
 
-## 🧐 What's inside?
+```bash
+brew install node
+```
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+- Gitのインストール
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
+- Gatsby CLIインストール
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
+```bash
+npm install -g gatsby-cli
+```
 
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
+## Gatsbyサイト構築
 
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
+- デフォルトスターターを使い作成
 
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
+```bash
+# gatsby new [ディレクトリ名]
+gatsby new gatsby-shpoify
+```
 
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.org/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
+- Shopifyのプラグインをインストール
 
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.org/docs/gatsby-config/) for more detail).
+```bash
+cd gatsby-shpoify
+yarn add gatsby-source-shopify shopify-buy
+```
 
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
+- プラグイン設定
 
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.org/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
+- `gatsby-config.js`に環境変数の読み込み処理を追加
 
-9.  **`LICENSE`**: This Gatsby starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
+```javascript
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+```
 
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
+- `.env.development`ファイルを作成する
+  - `development`は、`gatsby development`で使用される
+  - `production`は、`gatsby build`で使用される
 
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
+```dot
+SHOP_NAME = [ショップ名]
+ACCESS_TOKEN = [アクセストークン]
+```
 
-12. **`README.md`**: A text file containing useful reference information about your project.
+`gatsby-config.js`にshopifyへのアクセス情報を追加
 
-## 🎓 Learning Gatsby
+```javascript
 
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.org/). Here are some places to start:
+plugins: [
+  .
+  .
+  .
+  `gatsby-plugin-sharp`,
+  {
+    resolve: `gatsby-plugin-manifest`,
+    options: {
+      name: `gatsby-starter-default`,
+      short_name: `starter`,
+      start_url: `/`,
+      background_color: `#663399`,
+      theme_color: `#663399`,
+      display: `minimal-ui`,
+      icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+    },
+  },
+  // ここから
+  {
+    resolve: `gatsby-source-shopify`,
+    options: {
+      shopName: process.env.SHOP_NAME,
+      accessToken: process.env.ACCESS_TOKEN,
+    },
+  },
+  // ここまで
+]
+```
 
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.org/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
+## 商品ページを作成
 
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.org/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
+- 一覧ページ作成
 
-## 💫 Deploy
+```js: src/pages/products.js
+import React from "react"
+import { Link, graphql } from "gatsby"
+import Layout from "../components/layout"
+const ProductsPage = ({ data }) => (
+  <Layout>
+    <h1>Products</h1>
+    <ul>
+      {data.allShopifyProduct.edges.map(({ node }) => (
+        <li key={node.shopifyId}>
+          <h3>
+            <Link to={`/product/${node.handle}`}>{node.title}</Link>
+            {" - "}{parseInt(node.priceRange.minVariantPrice.amount)}円
+          </h3>
+          <p>{node.description}</p>
+        </li>
+      ))}
+    </ul>
+  </Layout>
+)
+export default ProductsPage
+export const query = graphql`
+  {
+    allShopifyProduct(sort: { fields: [title] }) {
+      edges {
+        node {
+          title
+          shopifyId
+          description
+          handle
+          priceRange {
+            minVariantPrice {
+              amount
+            }
+          }
+        }
+      }
+    }
+  }
+`
+```
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
+- 詳細ページ作成
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/gatsbyjs/gatsby-starter-default)
+```js: src/templates/proeuct.js
+import React from "react"
+import Layout from "../components/layout"
+const ProductTemplate = ({ pageContext }) => {
+  const { product } = pageContext
+  return (
+      <Layout>
+        <h1>{product.title}</h1>
+        <div>{parseInt(product.priceRange.minVariantPrice.amount)}円</div>
+        <div>{product.description}</div>
+      </Layout>
+  )
+}
+export default ProductTemplate
+```
 
-<!-- AUTO-GENERATED-CONTENT:END -->
+```js: gatsby-node.js
+const path = require(`path`)
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  // Query for all products in Shopify
+  const result = await graphql(`
+    query {
+      allShopifyProduct(sort: { fields: [title] }) {
+        edges {
+          node {
+            title
+            shopifyId
+            handle
+            description
+            priceRange {
+              minVariantPrice {
+                amount
+              }
+            }
+          }
+        }
+      }
+    }
+  `)
+  result.data.allShopifyProduct.edges.forEach(({ node }) => {
+    createPage({
+      path: `/product/${node.handle}`,
+      component: path.resolve(`./src/templates/product.js`),
+      context: {
+        product: node,
+      },
+    })
+  })
+}
+```
